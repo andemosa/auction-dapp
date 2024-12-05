@@ -136,89 +136,103 @@ const Details = () => {
           </span>
         </p>
       </div>
-      <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-3">
-        <div className="rounded-lg border border-green-100 bg-gradient-to-br from-green-50 to-emerald-50 p-4 md:p-6">
-          <label className="mb-2 flex items-center text-sm font-medium text-gray-600">
-            <Coins className="mr-2 h-4 w-4 text-green-600" />
-            Current Bid
-          </label>
-          <div className="flex items-baseline">
-            <span className="text-lg font-semibold text-green-600 lg:text-xl">
-              {highestBid ? parseFloat(highestBid.toString()).toFixed(2) : ""}
-            </span>
-            <span className="ml-2 text-sm font-medium text-green-600">ETH</span>
-          </div>
-        </div>
-        <div className="rounded-lg border border-red-100 bg-gradient-to-br from-red-50 to-orange-50 p-4 md:p-6">
-          <label className="mb-2 flex items-center text-sm font-medium text-gray-600">
-            <Clock className="mr-2 h-4 w-4 text-red-500" />
-            Time Remaining
-          </label>
-          <span className="text-lg font-semibold text-red-500 lg:text-xl">
-            {formatTimeRemaining(Number(auctionEnd))}
-          </span>
-        </div>
-        <div className="rounded-lg border border-blue-100 bg-gradient-to-br from-blue-50 to-sky-50 p-4 md:p-6">
-          <label className="mb-2 flex items-center text-sm font-medium text-gray-600">
-            <User className="mr-2 h-4 w-4 text-blue-500" />
-            Highest Bidder
-          </label>
-          <span className="text-lg font-semibold text-blue-600 lg:text-xl">
-            {highestBidder
-              ? shortAddress(`0x${highestBidder?.toString(16)!}`)
-              : ""}
-          </span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 md:p-6">
-          <h3 className="mb-4 text-base font-medium text-gray-700">
-            Propose a Bid
-          </h3>
-          <form onSubmit={handleBidSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="bid"
-                className="block text-sm font-medium text-gray-600"
-              >
-                Enter Bid (ETH)
+      {account ? (
+        <>
+          <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div className="rounded-lg border border-green-100 bg-gradient-to-br from-green-50 to-emerald-50 p-4 md:p-6">
+              <label className="mb-2 flex items-center text-sm font-medium text-gray-600">
+                <Coins className="mr-2 h-4 w-4 text-green-600" />
+                Current Bid
               </label>
-              <input
-                type="number"
-                id="bid"
-                name="bid"
-                min={0.0}
-                value={proposedBid}
-                onChange={(e) => setProposedBid(e.target.value)}
-                placeholder="e.g., 0.1"
-                className="mt-2 w-full rounded-lg border border-gray-200 p-3 text-sm"
-              />
+              <div className="flex items-baseline">
+                <span className="text-lg font-semibold text-green-600 lg:text-xl">
+                  {highestBid
+                    ? parseFloat(highestBid.toString()).toFixed(2)
+                    : ""}
+                </span>
+                <span className="ml-2 text-sm font-medium text-green-600">
+                  ETH
+                </span>
+              </div>
             </div>
-            <button
-              type="submit"
-              disabled={isLoading || endLoading}
-              className={`w-full rounded-lg px-4 py-2 text-sm text-white ${
-                isLoading ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
-              }`}
-            >
-              {isLoading ? "Submitting..." : "Submit Bid"}
-            </button>
-          </form>
-        </div>
-
-        {owner && owner === account?.address ? (
-          <div className="flex items-center justify-center rounded-lg border border-gray-100 bg-gray-50 p-4 md:p-6">
-            <button
-              disabled={isLoading || endLoading}
-              className="rounded-lg bg-red-600 px-6 py-3 text-sm font-medium text-white hover:bg-red-700"
-              onClick={handleEndAuction}
-            >
-              {endLoading ? "Submitting..." : "End Auction"}
-            </button>
+            <div className="rounded-lg border border-red-100 bg-gradient-to-br from-red-50 to-orange-50 p-4 md:p-6">
+              <label className="mb-2 flex items-center text-sm font-medium text-gray-600">
+                <Clock className="mr-2 h-4 w-4 text-red-500" />
+                Time Remaining
+              </label>
+              <span className="text-lg font-semibold text-red-500 lg:text-xl">
+                {formatTimeRemaining(Number(auctionEnd))}
+              </span>
+            </div>
+            <div className="rounded-lg border border-blue-100 bg-gradient-to-br from-blue-50 to-sky-50 p-4 md:p-6">
+              <label className="mb-2 flex items-center text-sm font-medium text-gray-600">
+                <User className="mr-2 h-4 w-4 text-blue-500" />
+                Highest Bidder
+              </label>
+              <span className="text-lg font-semibold text-blue-600 lg:text-xl">
+                {highestBidder
+                  ? shortAddress(`0x${highestBidder?.toString(16)!}`)
+                  : ""}
+              </span>
+            </div>
           </div>
-        ) : null}
-      </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 md:p-6">
+              <h3 className="mb-4 text-base font-medium text-gray-700">
+                Propose a Bid
+              </h3>
+              <form onSubmit={handleBidSubmit} className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="bid"
+                    className="block text-sm font-medium text-gray-600"
+                  >
+                    Enter Bid (ETH)
+                  </label>
+                  <input
+                    type="number"
+                    id="bid"
+                    name="bid"
+                    min={0.0}
+                    value={proposedBid}
+                    onChange={(e) => setProposedBid(e.target.value)}
+                    placeholder="e.g., 0.1"
+                    className="mt-2 w-full rounded-lg border border-gray-200 p-3 text-sm"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isLoading || endLoading}
+                  className={`w-full rounded-lg px-4 py-2 text-sm text-white ${
+                    isLoading
+                      ? "bg-gray-400"
+                      : "bg-green-600 hover:bg-green-700"
+                  }`}
+                >
+                  {isLoading ? "Submitting..." : "Submit Bid"}
+                </button>
+              </form>
+            </div>
+
+            {owner && owner === account?.address ? (
+              <div className="flex items-center justify-center rounded-lg border border-gray-100 bg-gray-50 p-4 md:p-6">
+                <button
+                  disabled={isLoading || endLoading}
+                  className="rounded-lg bg-red-600 px-6 py-3 text-sm font-medium text-white hover:bg-red-700"
+                  onClick={handleEndAuction}
+                >
+                  {endLoading ? "Submitting..." : "End Auction"}
+                </button>
+              </div>
+            ) : null}
+          </div>
+        </>
+      ) : (
+        <h3 className="text-center text-lg font-semibold md:text-xl">
+          Connect your wallet to place a bid.
+        </h3>
+      )}
     </section>
   );
 };
